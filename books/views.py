@@ -29,7 +29,7 @@ def create(request) :
     else :
         form = BookForm()
     context = {
-        'form' : form
+        'form' : form,
     }
     return render(request, 'books/create.html', context)
 
@@ -91,7 +91,7 @@ def delete(request, book_pk) :
 def thread_create(request, book_pk):
     book = Book.objects.get(pk=book_pk)
     if request.method == 'POST':
-        thread_form = ThreadForm(request.POST)
+        thread_form = ThreadForm(request.POST, request.FILES)
         if thread_form.is_valid():
             thread = thread_form.save(commit=False)
             thread.user = request.user
@@ -102,19 +102,58 @@ def thread_create(request, book_pk):
         thread_form = ThreadForm()
     context = {
         'book': book,
-        'author_description':author_description,
-        'audio_file': f"{settings.MEDIA_URL}{audio_filename}",
         'thread_form': thread_form,
     }
     return render(request, 'books/detail.html', context)
 
 @login_required
 @require_safe
-def thread_detail(request, book_pk, thread_pk):
-    book = Book.objects.get(pk=book_pk)
+def thread_detail(request, thread_pk):
     thread = Thread.objects.get(pk=thread_pk)
     context = {
-        'book': book,
         'thread': thread,
     }
     return render(request, 'books/thread_detail.html', context)
+
+@login_required
+@require_http_methods(['GET','POST'])
+def thread_update(request, book_pk, thread_pk):
+    book = Book.objects.get(pk=book_pk)
+    thread = Thread.objects.get(pk=thread_pk)
+    if request.user == thread.user:
+        if request.method == 'POST':
+            thread_form = ThreadForm(request.POST, request.FILES, instance=thread)
+            if thread_form.is_valid():
+                thread = thread_form.save(commit=False)
+                thread.user = request.user
+                thread.book = book
+                thread.save()
+                return redirect('books:detail', book.pk)
+        else:
+            thread_form = ThreadForm(instance=thread)
+        context = {
+            'thread_form': thread_form,
+        }
+        return render(request, 'books/thread_update.html', context)
+    return redirect('books:detail', book.pk)
+
+
+@login_required
+@require_POST
+def thread_delete(request, book_pk, thread_pk):
+    thread = Thread.objects.get(pk=thread_pk)
+    if request.user == thread.user:
+        thread.delete()
+        return redirect('books:detail', book_pk)
+    
+
+@login_required
+@require_POST
+def like(request, thread_pk):
+    if request.user.is_authenticated:
+        thread = Thread.objects.get(pk=thread_pk)
+        if thread.like_users.filter(pk=request.user.pk).exists():
+            thread.like_users.remove(request.user)
+        else:
+            thread.like_users.add(request.user)
+    return redirect('books:thread_detail', thread_pk)

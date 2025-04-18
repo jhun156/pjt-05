@@ -24,3 +24,5 @@ class Thread(models.Model):
     cover_img = models.ImageField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # 추가한 내용
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_threads')
