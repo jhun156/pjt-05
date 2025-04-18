@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_http_methods, require_POST
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
@@ -110,3 +111,17 @@ def profile(request):
         'profiles':profiles
     }
     return render(request, 'accounts/profile.html', context)
+
+@login_required
+@require_POST
+def follow(request):
+    User=get_user_model()
+    person=User.objects.get(pk=request.user.pk)
+    if person != request.user:
+        if person.followers.filter(pk=request.user.pk).exist():
+            person.follosers.remove(request.user)
+        else:
+            person.followers.add(request.user)
+        return redirect('accounts:profile', person.username)
+    return redirect('accounts:login')
+        

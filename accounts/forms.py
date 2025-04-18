@@ -6,17 +6,12 @@ from .models import User
 class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(
         widget = forms.PasswordInput(
-    #         attrs={
-    #             'class': 'form-control',
-    #             'palceholder': '비밀번호',
-    #         }
             )
     )
 
     password2 = forms.CharField(
         widget = forms.PasswordInput(
             attrs={
-                # 'class': 'form-control',
                 'palceholder': '비밀번호 확인',
             }
         )
@@ -43,11 +38,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         # 비밀번호 안뜨게 만들고 싶습니다.
-
-        # model=get_user_model()
         model=User
-        # fields=('username','email',)
-        # yearly_read_count=models.PositiveIntegerField(blank = True, null = True)
         fields = ('username', 'password1', 'password2', 'email', 'last_name', 'first_name',  'gender','age','weekly_avg_reading_time','yearly_read_count','profile','category')
         labels = {
             'username': '아이디',
@@ -96,7 +87,6 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model=User
-        # fields=('email',)
         fields = ('username', 'email', 'first_name', 'last_name', 'gender','age','weekly_avg_reading_time','yearly_read_count','profile', 'category')
     
     def __init__(self, *args, **kwargs):

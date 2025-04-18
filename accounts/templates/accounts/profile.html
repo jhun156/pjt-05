@@ -15,6 +15,23 @@
   <p>주간 독서 시간: {{profiles.weekly_avg_reading_time}}시간</p>
   <p>연간 독서량: {{profiles.yearly_read_count}}권</p>
   <p>카테고리: {{profiles.category}}</p>
+  <hr>
+  <div>
+    <div>팔로워 : {{person.followers.all|length}} </div>
+    <div>팔로잉 : {{person.followings.all|length}} </div>
+    {% if requset.user != person %}
+    <div>
+      <form action="{% url "accounts:follow" %}" method="POST">
+        {% csrf_token %}
+        {% if requset.user in person.followers.all %}
+        <input type="submit" value="Unfollow">
+        {% else %}
+        <input type="submit" value="Follow">
+        {% endif %}
+      </form>
+    </div>
+    {% endif %}
+  </div>
   
   <a href="{% url "accounts:update" %} ">회원정보수정</a>
 {% endblock content %}
