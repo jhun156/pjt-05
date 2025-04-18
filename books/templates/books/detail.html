@@ -46,10 +46,12 @@
     </div>
     <hr>
     <h1>Thread</h1>
-    <a href="{% url "books:thread_create" book.pk %}">쓰레드 작성</a>
+    <div>
+      <a href="{% url "books:thread_create" book.pk %}">쓰레드 작성</a>
+    </div>
     {% for thread in threads %}
     <a href="{% url "books:thread_detail" thread.pk %}">{{thread.title}} | {{thread.user.username}}</a>
-    <p>♥ {{thread.like_users | length}}</p>
+    <p>♥ {{thread.like_users.all | length}}</p>
     {% empty %}
     <p>게시글이 없습니다.</p>
     {% endfor %}

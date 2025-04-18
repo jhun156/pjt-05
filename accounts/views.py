@@ -119,10 +119,10 @@ def follow(request, user_pk):
         User = get_user_model()
         person=User.objects.get(pk=user_pk)
         if person != request.user:
-            if person.followers.filter(pk=request.user.pk).exist():
-                person.follosers.remove(request.user)
+            if person.followers.filter(pk=request.user.pk).exists():
+                person.followers.remove(request.user)
             else:
                 person.followers.add(request.user)
-        return redirect('accounts:profile', person.username)
+        return redirect('accounts:profile', person.pk)
     return redirect('accounts:login')
         

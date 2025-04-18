@@ -154,6 +154,8 @@ def thread_update(request, book_pk, thread_pk):
             thread_form = ThreadForm(instance=thread)
         context = {
             'thread_form': thread_form,
+            'book': book,
+            'thread': thread,
         }
         return render(request, 'books/thread_update.html', context)
     return redirect('books:detail', book.pk)

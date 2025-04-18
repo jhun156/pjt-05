@@ -28,7 +28,7 @@
           <a class="nav-link text-white" href="{% url "books:create" %} ">CREATE</a>
         </li>
         <li  class="nav-item">
-          <a class="nav-link text-white" href="{% url "accounts:profile" %} ">회원정보</a>
+          <a class="nav-link text-white" href="{% url "accounts:profile" user.pk %} ">회원정보</a>
         </li>
         <li  class="nav-item">
           <a class="nav-link text-white" href="{% url "accounts:delete" %} ">회원탈퇴</a>
