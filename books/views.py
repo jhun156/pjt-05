@@ -20,16 +20,37 @@ def index(request) :
 
 
 @require_http_methods(['GET', 'POST'])
-def create(request) :
-    if request.method == 'POST' :
+def create(request):
+    if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
-        if form.is_valid() :
-            form.save()
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.user = request.user  # 우선 사용자 지정
+
+            # 작가 정보 가져오기
+            text = wiki(book.author)
+            gpt_text = gpt(text)
+            author_info_dict = json.loads(gpt_text)
+
+            # TTS 생성
+            book.save()  # 먼저 저장해서 book.pk를 확보!
+            audio_file_name = f"summary_{book.pk}.mp3"
+            audio_path = os.path.join(settings.MEDIA_ROOT, audio_file_name)
+
+            tts = gTTS(text=author_info_dict["author_info"], lang='ko')
+            tts.save(audio_path)
+
+            # 모델 필드에 값 저장
+            book.author_info = author_info_dict["author_info"]
+            book.audio_file.name = audio_file_name  # 경로가 아닌 파일명만 저장
+            book.save()
+
             return redirect('books:index')
-    else :
+    else:
         form = BookForm()
+
     context = {
-        'form' : form,
+        'form': form,
     }
     return render(request, 'books/create.html', context)
 
