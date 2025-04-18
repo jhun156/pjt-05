@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Book
 from .forms import BookForm
-from . import wiki
+from . import utils
 import json
 from django.views.decorators.http import require_http_methods
 
