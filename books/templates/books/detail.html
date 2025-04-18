@@ -20,18 +20,13 @@
       <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hermann_Hesse_2.jpg" 
       class="rounded-circle"
       style="width: 120px; height: 120px; border-radius :50%; object-fit: cover;">
- 
         <div>
-          <h4  class="fw-bold">{{book.author}}</h4>
+          <h4  class="fw-bold">{{book.author}} : {{book.author_info}}</h4>
           <h5  class="fw-bold">대표작 : {{author_description.author_works}} </h5>
-          <h5  class="fw-bold">{{author_description.author_info}} </h5>
           <h5 class = "fs-6 fw-bold"> ※ 작가 대표작과 작가 정보는 AI가 생성한 답변으로, 정확하지 않을 수 있습니다. </h5>
         </div>
     </div>
-
-
     <hr>
-
     <div class="audio-container">
       <h2 class = "fs-5 fw-bold">도서 정보 음성 듣기</h2>
       <audio id="audioPlayer" controls>
@@ -39,18 +34,10 @@
           브라우저가 오디오 재생을 지원하지 않습니다.
       </audio>
       <div>
-
   </div>
-
     <hr>
-
-
-
     <div class="d-flex gap-1 ">
-
       <a href="{% url "books:update" book.pk %}"><button type="button" class="btn btn-secondary">UPDATE</button></a>
-
-
       <form action="{% url "books:delete" book.pk %}" method = 'POST'> 
         {% csrf_token %}
         <button type="input" class="btn btn-danger">DELETE</button>
@@ -59,11 +46,14 @@
     </div>
     <hr>
     <h1>Thread</h1>
+    <a href="{% url "books:thread_create" book.pk %}">쓰레드 작성</a>
     {% for thread in threads %}
-    <a href="{% url "books:Thread_detail" thread.pk %}">{{thread.title}}|{{thread.user.username}}</a>
+    <a href="{% url "books:thread_detail" thread.pk %}">{{thread.title}} | {{thread.user.username}}</a>
+    <p>♥ {{thread.like_users | length}}</p>
+    {% empty %}
+    <p>게시글이 없습니다.</p>
     {% endfor %}
- 
-    <hr>
+     <hr>
     <a href="{% url "books:index" %}"><button type="button" class="btn btn-primary">back</button></a>
 
   </div>

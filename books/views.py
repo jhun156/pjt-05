@@ -58,6 +58,7 @@ def create(request):
 @require_safe
 def detail(request, book_pk) :
     book = Book.objects.get(pk=book_pk)
+    threads = book.thread_set.all()
     # text=wiki(book.author)
     # gpt_text=gpt(text)
     # author_description=json.loads(gpt_text)
@@ -71,6 +72,7 @@ def detail(request, book_pk) :
     # 수정한 부분
     context = {
         'book': book,
+        'threads': threads,
     }
     return render(request, 'books/detail.html', context)
 
@@ -118,7 +120,8 @@ def thread_create(request, book_pk):
         'book': book,
         'thread_form': thread_form,
     }
-    return render(request, 'books/detail.html', context)
+    return render(request, 'books/thread_create.html', context)
+
 
 @login_required
 @require_safe
