@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<h1>{{thread.title}}</h1>
+<p><strong>도서:</strong> {{thread.book}} <strong>작성자:</strong> {{thread.user}} <strong>독서일:</strong> {{thread.reading_date}}</p>
+<br>
+<p>{{thread.content}}</p>
+
+
+<span>🖤{{thread.like_users|length}} 좋아요</span>
+<form action="#" method="POST">
+  {% csrf_token %}
+  {% if request.user in thread.like_users.all %}
+  <button type="input" class="btn btn-outline-success">좋아요 취소</button>
+  {% else %}
+  <button type="input" class="btn btn-success">좋아요</button>
+  {% endif %}
+</form>
+<hr>
+<div class="d-flex gap-1 ">
+  <a href="#"><button type="button" class="btn btn-secondary">수정</button></a>
+  <form action="#" method="POST">
+    {% csrf_token %}
+    <button type="input" class="btn btn-danger">삭제</button>
+  </form>
+</div>
+
+{% endblock content %}
+
+
+
