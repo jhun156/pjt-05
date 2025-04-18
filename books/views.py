@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Book
 from .forms import BookForm
-from . import utils
+from .utils import wiki, gpt
 import json
 from django.views.decorators.http import require_http_methods
 
@@ -37,8 +37,8 @@ def create(request) :
 @require_http_methods(['GET'])
 def detail(request, book_pk) :
     book = Book.objects.get(pk=book_pk)
-    text=wiki.wiki(book.author)
-    gpt_text=wiki.gpt(text)
+    text=wiki(book.author)
+    gpt_text=gpt(text)
     author_description=json.loads(gpt_text)
     # author_image = wiki.get_author_image(book.author)
     # author_description=json.loads(wiki.gpt(wiki.wiki(book.author)))
