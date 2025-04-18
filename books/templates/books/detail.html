@@ -57,6 +57,11 @@
       </form>
 
     </div>
+    <hr>
+    <h1>Thread</h1>
+    {% for thread in threads %}
+    <a href="{% url "books:Thread_detail" thread.pk %}">{{thread.title}}|{{thread.user.username}}</a>
+    {% endfor %}
  
     <hr>
     <a href="{% url "books:index" %}"><button type="button" class="btn btn-primary">back</button></a>

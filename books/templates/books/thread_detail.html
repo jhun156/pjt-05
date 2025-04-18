@@ -4,7 +4,10 @@
 {% block content %}
 
 <h1>{{thread.title}}</h1>
-<p><strong>도서:</strong> {{thread.book}} <strong>작성자:</strong> {{thread.user}} <strong>독서일:</strong> {{thread.reading_date}}</p>
+<p>
+  <strong>도서:</strong> <a href="{% url "books:detail" book.pk %}" >{{book.title}}</a>
+  <strong>작성자:</strong> <a href="{% url "accounts:profile" thread.user %}">{{user.username}}</a>
+  <strong>독서일:</strong> {{thread.reading_date}}</p>
 <br>
 <p>{{thread.content}}</p>
 
