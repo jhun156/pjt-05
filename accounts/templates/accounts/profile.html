@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+  {% if profiles.profile %}
+  <img src="{{ profiles.profile.url }}" class="card-img-top" style="width: 200px" alt="...">
+  {% else %}
+  <img src="{% static "base_img.png" %}" alt="image" style="width: 200px">
+  {% endif %}
+  <p>닉네임: {{profiles.username}}</p>
+  <p>이메일: {{profiles.email}}</p>
+  <p>성: {{profiles.last_name}}</p>
+  <p>이름: {{profiles.first_name}}</p>
+  <p>성별: {{profiles.gender}}</p>
+  <p>나이: {{profiles.age}}</p>
+  <p>주간 독서 시간: {{profiles.weekly_avg_reading_time}}시간</p>
+  <p>연간 독서량: {{profiles.yearly_read_count}}권</p>
+  <p>카테고리: {{profiles.category}}</p>
+  
+  <a href="{% url "accounts:update" %} ">회원정보수정</a>
+{% endblock content %}
