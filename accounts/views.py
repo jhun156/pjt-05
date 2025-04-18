@@ -105,23 +105,24 @@ def change_password(request, user_pk):
 
 @login_required
 @require_http_methods(['GET'])
-def profile(request):
-    profiles = User.objects.get(pk = request.user.pk)
+def profile(request, user_pk):
+    profiles = User.objects.get(pk = user_pk)
     context = {
-        'profiles':profiles
+        'profiles':profiles,
     }
     return render(request, 'accounts/profile.html', context)
 
 @login_required
 @require_POST
-def follow(request):
-    User=get_user_model()
-    person=User.objects.get(pk=request.user.pk)
-    if person != request.user:
-        if person.followers.filter(pk=request.user.pk).exist():
-            person.follosers.remove(request.user)
-        else:
-            person.followers.add(request.user)
+def follow(request, user_pk):
+    if request.user.is_authenticated:
+        User = get_user_model()
+        person=User.objects.get(pk=user_pk)
+        if person != request.user:
+            if person.followers.filter(pk=request.user.pk).exist():
+                person.follosers.remove(request.user)
+            else:
+                person.followers.add(request.user)
         return redirect('accounts:profile', person.username)
     return redirect('accounts:login')
         

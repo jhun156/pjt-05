@@ -13,15 +13,13 @@ class User(AbstractUser):
     weekly_avg_reading_time = models.PositiveIntegerField(blank = True, null = True)
     yearly_read_count=models.PositiveIntegerField(blank = True, null = True)
     profile = models.ImageField(upload_to='',default='base_image.png',blank=True)
-    
-
     category = models.CharField(
         max_length=500,
         blank=True,
         verbose_name='카테고리',
         )
     
-    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
 
 # class UserFollowings(models.Model):
 #     from_user_id=models.ForeignKey(User, on_delete=models.CASCADE)
