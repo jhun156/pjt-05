@@ -58,26 +58,19 @@ def create(request):
 @require_safe
 def detail(request, book_pk) :
     book = Book.objects.get(pk=book_pk)
-    text=wiki(book.author)
-    gpt_text=gpt(text)
-    author_description=json.loads(gpt_text)
+    # text=wiki(book.author)
+    # gpt_text=gpt(text)
+    # author_description=json.loads(gpt_text)
     # author_image = wiki.get_author_image(book.author)
     # author_description=json.loads(wiki.gpt(wiki.wiki(book.author)))
-    tts = gTTS(text=author_description["author_info"], lang='ko')  # 한국어
-    audio_filename = f"summary_{book_pk}.mp3"
-    audio_path = os.path.join(settings.MEDIA_ROOT, audio_filename)
-    tts.save(audio_path)  # 음성 파일 저장
+    # tts = gTTS(text=author_description["author_info"], lang='ko')  # 한국어
+    # audio_filename = f"summary_{book_pk}.mp3"
+    # audio_path = os.path.join(settings.MEDIA_ROOT, audio_filename)
+    # tts.save(audio_path)  # 음성 파일 저장
 
     # 수정한 부분
-    thread_form = ThreadForm()
-
     context = {
         'book': book,
-        'author_description':author_description,
-        # 'author_image': author_image
-        'audio_file': f"{settings.MEDIA_URL}{audio_filename}",
-        # 수정한 부분
-        'thread_form': thread_form,
     }
     return render(request, 'books/detail.html', context)
 
@@ -131,8 +124,12 @@ def thread_create(request, book_pk):
 @require_safe
 def thread_detail(request, thread_pk):
     thread = Thread.objects.get(pk=thread_pk)
+    book = thread.book
+    user = thread.user
     context = {
         'thread': thread,
+        'book': book,
+        'user': user,
     }
     return render(request, 'books/thread_detail.html', context)
 
