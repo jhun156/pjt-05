@@ -1,51 +1,17 @@
 {% extends "base.html" %}
-
 {% block content %}
-<h1>회원정보 수정</h1>
-<form action="{% url "accounts:update" %}" method='POST' enctype='multipart/form-data'>
-  {% csrf_token %}
-  <span>아이디: </span>
-  <br>
-  {{form.username}}
-  <p></p>
-  <span>성: </span>
-  <br>
-  {{form.last_name}}
-  <p></p>
-  <span>이름:</span>
-  <br>
-  {{form.first_name}}
-  <p></p>
-  <span>이메일:</span>
-  <br>
-  {{form.email}}
-  <p></p>
-  <span>성별: </span>
-  <br>
-  {{form.gender}}
-  <p></p>
-  <span>나이: </span>
-  <br>
-  {{form.age}}
-  <p></p>
-  <span>주간 평균 독서 시간(시간): </span>
-  <br>
-  {{form.weekly_avg_reading_time}}
-  <p></p>
-  <span>연간 독서량(권): </span>
-  <br>
-  {{form.yearly_read_count}}
-  <p></p>
-  <span>프로필 사진: </span>
-  <br>
-  {{form.profile}}
-  <p></p>
-  <span>카테고리: </span>
-  <br>
-  {{form.category}}
-  <p></p>
-  <a href="{% url 'change_password' user.pk %}">비밀번호 변경</a>
-  <p></p>
-  <button type='submit'>저장</button>
-</form>
+<div class="container mt-5">
+  <div class="card shadow p-4 col-md-8 mx-auto">
+    <h2 class="fw-bold text-center mb-4">🙋‍♀️ 회원정보 수정</h2>
+
+    <form action="{% url 'accounts:update' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <a href="{% url 'change_password' user.pk %}" class="btn btn-outline-secondary mt-2 mb-4">비밀번호 변경</a>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">저장</button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock content %}

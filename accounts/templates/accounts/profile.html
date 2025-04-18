@@ -1,38 +1,49 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-  {% if profiles.profile %}
-    <img src="{{ profiles.profile.url }}" class="card-img-top" style="width: 200px" alt="...">
-  {% else %}
-    <img src="{% static "base_img.png" %}" alt="image" style="width: 200px">
-  {% endif %}
+<div class="container mt-5">
+  <div class="card shadow p-4 col-md-8 mx-auto">
+    <h2 class="fw-bold text-center mb-4">🙋‍♂️ 프로필</h2>
 
-  <p>닉네임: {{ profiles.username }}</p>
-  <p>이메일: {{ profiles.email }}</p>
-  <p>성: {{ profiles.last_name }}</p>
-  <p>이름: {{ profiles.first_name }}</p>
-  <p>성별: {{ profiles.gender }}</p>
-  <p>나이: {{ profiles.age }}</p>
-  <p>주간 독서 시간: {{ profiles.weekly_avg_reading_time }}시간</p>
-  <p>연간 독서량: {{ profiles.yearly_read_count }}권</p>
-  <p>카테고리: {{ profiles.category }}</p>
-
-  <hr>
-  <div>
-    <div>팔로워: {{ profiles.followers.all|length }}</div>
-    <div>팔로잉: {{ profiles.followings.all|length }}</div>
-
-    {% if request.user != profiles %}
-    <form action="{% url "accounts:follow" profiles.pk %}" method="POST">
-      {% csrf_token %}
-      {% if request.user in profiles.followers.all %}
-        <button type="submit">언팔로우</button>
+    <div class="text-center mb-4">
+      {% if profiles.profile %}
+        <img src="{{ profiles.profile.url }}" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
       {% else %}
-        <button type="submit">팔로우</button>
+        <img src="{% static 'base_img.png' %}" class="rounded-circle" style="width: 150px; height: 150px;">
       {% endif %}
-    </form>
-    {% endif %}
-  </div>
+    </div>
 
-  <a href="{% url "accounts:update" %}">회원정보 수정</a>
+    <ul class="list-group mb-3">
+      <li class="list-group-item">닉네임: {{ profiles.username }}</li>
+      <li class="list-group-item">이메일: {{ profiles.email }}</li>
+      <li class="list-group-item">성: {{ profiles.last_name }}</li>
+      <li class="list-group-item">이름: {{ profiles.first_name }}</li>
+      <li class="list-group-item">성별: {{ profiles.gender }}</li>
+      <li class="list-group-item">나이: {{ profiles.age }}</li>
+      <li class="list-group-item">주간 독서 시간: {{ profiles.weekly_avg_reading_time }}시간</li>
+      <li class="list-group-item">연간 독서량: {{ profiles.yearly_read_count }}권</li>
+      <li class="list-group-item">카테고리: {{ profiles.category }}</li>
+    </ul>
+
+    <div class="mb-3">
+      <p>팔로워: <strong>{{ profiles.followers.all|length }}</strong></p>
+      <p>팔로잉: <strong>{{ profiles.followings.all|length }}</strong></p>
+
+      {% if request.user != profiles %}
+        <form action="{% url 'accounts:follow' profiles.pk %}" method="POST">
+          {% csrf_token %}
+          {% if request.user in profiles.followers.all %}
+            <button type="submit" class="btn btn-danger">언팔로우</button>
+          {% else %}
+            <button type="submit" class="btn btn-success">팔로우</button>
+          {% endif %}
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="text-center">
+      <a href="{% url 'accounts:update' %}" class="btn btn-outline-primary">회원정보 수정</a>
+    </div>
+  </div>
+</div>
 {% endblock content %}

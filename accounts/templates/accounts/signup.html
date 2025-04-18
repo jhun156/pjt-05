@@ -1,10 +1,16 @@
 {% extends "base.html" %}
-
 {% block content %}
-<h1>회원가입</h1>
-<form action="{% url "accounts:signup" %}" method='POST'  enctype='multipart/form-data'>
-  {% csrf_token %}
-  {{form.as_p}}
-  <button type='submit'>저장</button>
-</form>
+<div class="container mt-5">
+  <div class="card shadow p-4 col-md-8 mx-auto">
+    <h2 class="fw-bold text-center mb-4">📋 회원가입</h2>
+
+    <form action="{% url 'accounts:signup' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="d-grid mt-3">
+        <button type="submit" class="btn btn-success">가입하기</button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock content %}

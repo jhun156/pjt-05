@@ -1,19 +1,17 @@
 {% extends "base.html" %}
-
 {% block content %}
-<div class="d-flex justify-content-center">
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h2 class="fw-bold text-center mb-4">📚 도서 등록</h2>
 
-  <div class="container mx-auto mt-3">
+    <form action="{% url 'books:create' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
 
-    <h1 >도서 등록 페이지</h1>
-      <form action="{% url "books:create" %}" method = 'POST' enctype='multipart/form-data'>
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value='Submit'>
-      </form>
-
+      <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-primary">등록</button>
+      </div>
+    </form>
   </div>
 </div>
-
-
 {% endblock content %}

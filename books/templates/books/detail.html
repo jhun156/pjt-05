@@ -1,65 +1,47 @@
 {% extends "base.html" %}
-
-
 {% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h2 class="fw-bold">📕 {{ book.title }}</h2>
 
-<div class="d-flex justify-content-center">
-
-  <div class="container mx-auto mt-3">
-    <h1>도서 상세 페이지</h1>
     {% if book.cover_image %}
-    <img src="{{book.cover_image.url}}" alt="도서 이미지" style = "width : 20rem; height : auto">
+      <img src="{{ book.cover_image.url }}" class="img-fluid rounded mb-3" style="max-height: 400px;">
     {% endif %}
-    <h2  class="fw-bold">{{book.title}}</h2>
-    <p>{{book.description}}</p>
-    <h6 class="fw-bold">회원 리뷰 평점 : {{book.customer_review_rank}} / 10</h6>
-    <br>
+
+    <p>{{ book.description }}</p>
+    <p class="fw-semibold">⭐ 평점: {{ book.customer_review_rank }}/10</p>
 
     <hr>
-    <div  class="d-flex gap-3">
-      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hermann_Hesse_2.jpg" 
-      class="rounded-circle"
-      style="width: 120px; height: 120px; border-radius :50%; object-fit: cover;">
-        <div>
-          <h4  class="fw-bold">{{book.author}} : {{book.author_info}}</h4>
-          <h5  class="fw-bold">대표작 : {{author_description.author_works}} </h5>
-          <h5 class = "fs-6 fw-bold"> ※ 작가 대표작과 작가 정보는 AI가 생성한 답변으로, 정확하지 않을 수 있습니다. </h5>
-        </div>
-    </div>
+    <h5 class="fw-bold">작가 정보</h5>
+    <p><strong>{{ book.author }}</strong> - {{ book.author_info }}</p>
+
     <hr>
-    <div class="audio-container">
-      <h2 class = "fs-5 fw-bold">도서 정보 음성 듣기</h2>
-      <audio id="audioPlayer" controls>
-          <source src="{{audio_file}}" type="audio/mpeg">
-          브라우저가 오디오 재생을 지원하지 않습니다.
-      </audio>
-      <div>
-  </div>
+    <h6>🎧 도서 오디오</h6>
+    <audio controls>
+      <source src="{{ audio_file }}" type="audio/mpeg">
+    </audio>
+
     <hr>
-    <div class="d-flex gap-1 ">
-      <a href="{% url "books:update" book.pk %}"><button type="button" class="btn btn-secondary">UPDATE</button></a>
-      <form action="{% url "books:delete" book.pk %}" method = 'POST'> 
+    <div class="d-flex gap-2">
+      <a href="{% url 'books:update' book.pk %}" class="btn btn-secondary">수정</a>
+      <form action="{% url 'books:delete' book.pk %}" method="POST">
         {% csrf_token %}
-        <button type="input" class="btn btn-danger">DELETE</button>
+        <button type="submit" class="btn btn-danger">삭제</button>
       </form>
-
     </div>
+
     <hr>
-    <h1>Thread</h1>
-    <div>
-      <a href="{% url "books:thread_create" book.pk %}">쓰레드 작성</a>
-    </div>
+    <h4>📝 쓰레드 목록</h4>
+    <a href="{% url 'books:thread_create' book.pk %}" class="btn btn-outline-primary mb-3">새 쓰레드 작성</a>
     {% for thread in threads %}
-    <a href="{% url "books:thread_detail" thread.pk %}">{{thread.title}} | {{thread.user.username}}</a>
-    <p>♥ {{thread.like_users.all | length}}</p>
+      <div class="border-bottom pb-2 mb-2">
+        <a href="{% url 'books:thread_detail' thread.pk %}" class="text-dark">{{ thread.title }}</a> - <small>{{ thread.user.username }}</small>
+        <p class="mb-0">♥ {{ thread.like_users.all|length }}</p>
+      </div>
     {% empty %}
-    <p>게시글이 없습니다.</p>
+      <p>등록된 쓰레드가 없습니다.</p>
     {% endfor %}
-     <hr>
-    <a href="{% url "books:index" %}"><button type="button" class="btn btn-primary">back</button></a>
-
+    <a href="{% url 'books:index' %}" class="btn btn-outline-secondary mt-3">메인으로</a>
   </div>
 </div>
-
-
 {% endblock content %}
